@@ -1,69 +1,153 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Navbar } from '@/components/Navbar';
+import { TableBanner } from '@/components/TableBanner';
+import { CategoryTabs } from '@/components/CategoryTabs';
+import { ProductCard } from '@/components/ProductCard';
+import { CartDrawer } from '@/components/CartDrawer';
+import { FloatingCartBar } from '@/components/FloatingCartBar';
+import { useCartStore } from '@/store/useCartStore';
+import { Category, Product } from '@/types';
+import { INITIAL_CATEGORIES, INITIAL_PRODUCTS } from '@/lib/mock-data';
+import { UtensilsCrossed, Sparkles } from 'lucide-react';
+
+function CatalogContent() {
+  const searchParams = useSearchParams();
+  const setIsCartOpen = useCartStore((state) => state.setIsCartOpen);
+  const setOrderDetails = useCartStore((state) => state.setOrderDetails);
+
+  const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
+  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [activeCategoryId, setActiveCategoryId] = useState<number>(1); // 1 = Semua Menu
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Check URL query parameters for table number (e.g. ?table=05 or ?meja=05 from QR code)
+  useEffect(() => {
+    const tableFromUrl = searchParams.get('table') || searchParams.get('meja');
+    if (tableFromUrl) {
+      setOrderDetails({ tableNumber: tableFromUrl });
+    }
+  }, [searchParams, setOrderDetails]);
+
+  // Fetch live products and categories from API
+  useEffect(() => {
+    async function loadCatalog() {
+      try {
+        const [prodRes, catRes] = await Promise.all([
+          fetch('/api/products').then((r) => r.json()),
+          fetch('/api/categories').then((r) => r.json()),
+        ]);
+
+        if (prodRes?.products) {
+          setProducts(prodRes.products);
+        }
+        if (catRes?.categories) {
+          setCategories(catRes.categories);
+        }
+      } catch (err) {
+        console.error('Failed to fetch catalog from API, using fallback:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadCatalog();
+  }, []);
+
+  // Filter products based on active category and search query
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      activeCategoryId === 1 || activeCategoryId === 0 || product.categoryId === activeCategoryId;
+
+    const matchesSearch =
+      !searchQuery.trim() ||
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description?.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesCategory && matchesSearch;
+  });
+
+  return (
+    <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100">
+      {/* Top Navigation */}
+      <Navbar onOpenCart={() => setIsCartOpen(true)} />
+
+      {/* Main Content */}
+      <main className="flex-1 pb-24">
+        {/* Hero & Table Indicator */}
+        <TableBanner
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+        />
+
+        {/* Category Tabs */}
+        <div className="sticky top-16 z-30 bg-zinc-50/95 dark:bg-black/95 backdrop-blur-md border-b border-zinc-200/80 dark:border-zinc-800/80">
+          <CategoryTabs
+            categories={categories}
+            activeCategoryId={activeCategoryId}
+            onSelectCategory={setActiveCategoryId}
+          />
+        </div>
+
+        {/* Product Grid */}
+        <div className="max-w-4xl mx-auto px-4 mt-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+              {searchQuery ? `Hasil Pencarian ("${searchQuery}")` : 'Katalog Menu'}
+            </h2>
+            <span className="text-xs text-zinc-500 font-mono">
+              {filteredProducts.length} item
+            </span>
+          </div>
+
+          {filteredProducts.length === 0 ? (
+            <div className="text-center py-16 px-4 bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800 space-y-3">
+              <div className="w-12 h-12 mx-auto rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center text-zinc-400">
+                <UtensilsCrossed className="w-6 h-6 stroke-1" />
+              </div>
+              <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm">
+                Tidak ada menu yang cocok
+              </h3>
+              <p className="text-xs text-zinc-500 max-w-sm mx-auto">
+                Coba gunakan kata kunci pencarian yang lain atau pilih kategori menu yang berbeda.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-zinc-200 dark:border-zinc-900 py-6 text-center text-xs text-zinc-500 dark:text-zinc-600 space-y-1">
+        <p className="font-medium tracking-tight">
+          NOIR & BLANC COFFEE • Self-Service Order System
+        </p>
+        <p className="text-[11px] text-zinc-400 dark:text-zinc-700">
+          Pesanan terkirim langsung ke kasir secara real-time. Powered by Next.js & Supabase.
+        </p>
+      </footer>
+
+      {/* Floating Cart Button (Mobile & Desktop) */}
+      <FloatingCartBar onOpenCart={() => setIsCartOpen(true)} />
+
+      {/* Slide-over Cart & Checkout Drawer */}
+      <CartDrawer />
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center font-mono text-xs">Memuat katalog...</div>}>
+      <CatalogContent />
+    </Suspense>
   );
 }
