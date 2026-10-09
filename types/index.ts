@@ -30,7 +30,7 @@ export interface SelectedItemOptions {
   temperature?: 'Panas (Hot)' | 'Dingin (Ice)';
   sugarLevel?: 'Normal Sugar' | 'Less Sugar (50%)' | 'No Sugar (0%)';
   iceLevel?: 'Normal Ice' | 'Less Ice' | 'No Ice';
-  servingTemp?: 'Hangat (Dipanaskan)' | 'Suhu Ruang / Standar';
+  servingTemp?: 'Hangat (Dipanaskan)' | 'Fresh Saji (Langsung Saji)';
   spiciness?: 'Tidak Pedas' | 'Sedang' | 'Pedas';
   selectedFood?: string;
   selectedDrink?: string;

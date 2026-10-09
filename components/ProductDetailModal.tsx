@@ -37,7 +37,7 @@ export function ProductDetailModal({
   const [temperature, setTemperature] = useState<'Panas (Hot)' | 'Dingin (Ice)'>('Panas (Hot)');
   const [sugarLevel, setSugarLevel] = useState<'Normal Sugar' | 'Less Sugar (50%)' | 'No Sugar (0%)'>('Normal Sugar');
   const [iceLevel, setIceLevel] = useState<'Normal Ice' | 'Less Ice' | 'No Ice'>('Normal Ice');
-  const [servingTemp, setServingTemp] = useState<'Hangat (Dipanaskan)' | 'Suhu Ruang / Standar'>('Hangat (Dipanaskan)');
+  const [servingTemp, setServingTemp] = useState<'Hangat (Dipanaskan)' | 'Fresh Saji (Langsung Saji)'>('Hangat (Dipanaskan)');
   const [spiciness, setSpiciness] = useState<'Tidak Pedas' | 'Sedang' | 'Pedas'>('Tidak Pedas');
   
   // Combo package selections
@@ -134,7 +134,7 @@ export function ProductDetailModal({
       }
     } else if (isFood) {
       if (product.customizationConfig?.allowsHeating || isPastry) {
-        parts.push(servingTemp === 'Hangat (Dipanaskan)' ? 'Hangat' : 'Standar');
+        parts.push(servingTemp === 'Hangat (Dipanaskan)' ? 'Hangat' : 'Fresh Saji');
       }
       if (product.customizationConfig?.allowsSpiciness && spiciness !== 'Tidak Pedas') {
         parts.push(`Pedas: ${spiciness}`);
@@ -507,14 +507,14 @@ export function ProductDetailModal({
 
                     <button
                       type="button"
-                      onClick={() => setServingTemp('Suhu Ruang / Standar')}
+                      onClick={() => setServingTemp('Fresh Saji (Langsung Saji)')}
                       className={`py-3 px-3 rounded-xl border flex items-center justify-center gap-2 font-bold text-xs sm:text-sm transition-all ${
-                        servingTemp === 'Suhu Ruang / Standar'
+                        servingTemp === 'Fresh Saji (Langsung Saji)'
                           ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white shadow-md'
                           : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800'
                       }`}
                     >
-                      <span>Suhu Ruang</span>
+                      <span>Fresh Saji (Langsung Saji)</span>
                     </button>
                   </div>
                 </div>

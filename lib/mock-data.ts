@@ -157,7 +157,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 6,
     name: 'Classic Butter Croissant',
-    description: 'Flaky, buttery French pastry renyah di luar dan lembut berlapis di dalam. Pilihan dipanaskan renyah atau suhu ruang.',
+    description: 'Flaky, buttery French pastry renyah di luar dan lembut berlapis di dalam. Pilihan dipanaskan renyah atau fresh saji.',
     price: 25000,
     isAvailable: true,
     categoryId: 4,

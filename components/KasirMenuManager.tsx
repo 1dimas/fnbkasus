@@ -491,7 +491,7 @@ export function KasirMenuManager() {
                       onChange={(e) => setFormAllowsHeating(e.target.checked)}
                       className="w-4 h-4 rounded"
                     />
-                    <span>Opsi Makanan: Dipanaskan (Hangat) / Suhu Ruang</span>
+                    <span>Opsi Makanan: Dipanaskan (Hangat) / Fresh Saji</span>
                   </label>
 
                   <label className="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer">
