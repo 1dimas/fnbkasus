@@ -11,20 +11,26 @@ export async function GET() {
         .order('id', { ascending: true });
 
       if (!error && data && data.length > 0) {
-        return NextResponse.json({
-          success: true,
-          source: 'supabase',
-          categories: [{ id: 0, name: 'Semua Menu' }, ...data],
-        });
+        return NextResponse.json(
+          {
+            success: true,
+            source: 'supabase',
+            categories: [{ id: 0, name: 'Semua Menu' }, ...data],
+          },
+          { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' } }
+        );
       }
     }
   } catch (err) {
     console.error('Error fetching categories from Supabase, using mock fallback:', err);
   }
 
-  return NextResponse.json({
-    success: true,
-    source: 'local',
-    categories: INITIAL_CATEGORIES,
-  });
+  return NextResponse.json(
+    {
+      success: true,
+      source: 'local',
+      categories: INITIAL_CATEGORIES,
+    },
+    { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' } }
+  );
 }

@@ -22,22 +22,22 @@ export function TableBanner({ searchQuery, onSearchChange }: TableBannerProps) {
   };
 
   return (
-    <section className="max-w-4xl mx-auto px-4 pt-6 pb-2 space-y-5">
+    <section className="max-w-4xl mx-auto px-3.5 sm:px-4 pt-3 sm:pt-6 pb-1 sm:pb-2 space-y-3 sm:space-y-4">
       {/* Hero Banner Card */}
-      <div className="relative overflow-hidden rounded-3xl bg-black text-white p-6 md:p-8 border border-zinc-800 shadow-xl">
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-black text-white p-4 sm:p-6 md:p-8 border border-zinc-800 shadow-lg">
         <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-zinc-800/40 blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-700/80 text-[11px] font-medium text-zinc-300">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="space-y-1 sm:space-y-1.5">
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-700/80 text-[10px] sm:text-[11px] font-medium text-zinc-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               Open Daily 08.00 - 23.00
             </div>
-            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white uppercase">
-              Pesan Langsung Dari Meja
+            <h2 className="text-lg sm:text-2xl md:text-3xl font-extrabold tracking-tight text-white uppercase">
+              Pesan Dari Meja
             </h2>
-            <p className="text-xs md:text-sm text-zinc-400 max-w-md">
-              Pilih menu, atur pesanan Anda, dan kirim langsung ke kasir secara real-time tanpa harus mengantre.
+            <p className="text-[11px] sm:text-xs md:text-sm text-zinc-400 max-w-md line-clamp-2 sm:line-clamp-none">
+              Pilih menu, tentukan varian favorit Anda, dan kirim langsung ke kasir secara instan.
             </p>
           </div>
 

@@ -82,7 +82,7 @@ function CatalogContent() {
       <Navbar onOpenCart={() => setIsCartOpen(true)} />
 
       {/* Main Content */}
-      <main className="flex-1 pb-24">
+      <main className="flex-1 pb-28 sm:pb-24">
         {/* Hero & Table Indicator */}
         <TableBanner
           searchQuery={searchQuery}
@@ -99,9 +99,9 @@ function CatalogContent() {
         </div>
 
         {/* Product Grid */}
-        <div className="max-w-4xl mx-auto px-4 mt-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 mt-4 sm:mt-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <h2 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
               {searchQuery ? `Hasil Pencarian ("${searchQuery}")` : 'Katalog Menu'}
             </h2>
             <span className="text-xs text-zinc-500 font-mono">
@@ -122,7 +122,7 @@ function CatalogContent() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4 md:gap-5">
               {filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}

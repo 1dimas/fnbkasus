@@ -40,7 +40,10 @@ export async function GET() {
           imageUrl: item.image_url,
           category: item.categories,
         }));
-        return NextResponse.json({ success: true, source: 'supabase', products: formattedProducts });
+        return NextResponse.json(
+          { success: true, source: 'supabase', products: formattedProducts },
+          { headers: { 'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=59' } }
+        );
       }
     }
   } catch (err) {
@@ -48,11 +51,14 @@ export async function GET() {
   }
 
   // Fallback to local in-memory prototype store
-  return NextResponse.json({
-    success: true,
-    source: 'local',
-    products: getLocalProducts(),
-  });
+  return NextResponse.json(
+    {
+      success: true,
+      source: 'local',
+      products: getLocalProducts(),
+    },
+    { headers: { 'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=59' } }
+  );
 }
 
 export async function POST(request: Request) {

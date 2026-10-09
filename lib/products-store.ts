@@ -22,12 +22,12 @@ export function getLocalProducts(): Product[] {
       if (prod.id === 13 || prod.name.includes('Chill Snack')) {
         return {
           ...prod,
-          imageUrl: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=600&auto=format&fit=crop&q=80',
+          imageUrl: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=360&auto=format&fit=crop&q=70',
         };
       }
       return {
         ...prod,
-        imageUrl: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&auto=format&fit=crop&q=80',
+        imageUrl: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=360&auto=format&fit=crop&q=70',
       };
     }
     return prod;
@@ -50,7 +50,7 @@ export function addLocalProduct(productData: Partial<Product>): Product {
     categoryId: Number(productData.categoryId) || 2,
     imageUrl:
       productData.imageUrl?.trim() ||
-      'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=360&auto=format&fit=crop&q=70',
     customizationConfig: productData.customizationConfig || {
       allowsTemperature: [2, 3, 7].includes(Number(productData.categoryId)),
       allowsSugarLevel: [2, 3, 7].includes(Number(productData.categoryId)),

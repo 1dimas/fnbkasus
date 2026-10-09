@@ -40,7 +40,7 @@ export function Navbar({ onOpenCart, cafeName }: NavbarProps) {
         {/* Right action controls */}
         <div className="flex items-center gap-2.5">
           {orderDetails.tableNumber && (
-            <div className="hidden sm:flex items-center px-3 py-1 rounded-full border border-zinc-300 dark:border-zinc-700 bg-zinc-100/80 dark:bg-zinc-900 text-xs font-semibold text-zinc-800 dark:text-zinc-200 tracking-wide">
+            <div className="flex items-center px-2.5 py-1 rounded-full border border-zinc-300 dark:border-zinc-700 bg-zinc-100/90 dark:bg-zinc-900 text-[11px] sm:text-xs font-bold text-zinc-900 dark:text-zinc-100 tracking-wide">
               <span>MEJA #{orderDetails.tableNumber}</span>
             </div>
           )}

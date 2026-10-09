@@ -19,7 +19,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 45000,
     isAvailable: true,
     categoryId: 7,
-    imageUrl: 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       isComboPackage: true,
       comboFoodOptions: ['Classic Butter Croissant', 'Dark Choco Almond Pain'],
@@ -35,7 +35,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 68000,
     isAvailable: true,
     categoryId: 7,
-    imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       isComboPackage: true,
       comboFoodOptions: ['Truffle Mushroom Toast (Original)', 'Truffle Mushroom Toast (Extra Cheese)'],
@@ -52,7 +52,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 52000,
     isAvailable: true,
     categoryId: 7,
-    imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       isComboPackage: true,
       comboFoodOptions: ['Dark Choco Almond Pain', 'Classic Butter Croissant'],
@@ -68,7 +68,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 55000,
     isAvailable: true,
     categoryId: 7,
-    imageUrl: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       isComboPackage: true,
       comboFoodOptions: ['Crispy Truffle Fries (Original Truffle)', 'Crispy Truffle Fries (Spicy Truffle)'],
@@ -87,7 +87,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 22000,
     isAvailable: true,
     categoryId: 2,
-    imageUrl: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       allowsTemperature: true, // Panas atau Dingin
       allowsSugarLevel: true,
@@ -101,7 +101,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 28000,
     isAvailable: true,
     categoryId: 2,
-    imageUrl: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       allowsTemperature: true, // Panas atau Dingin
       allowsSugarLevel: true,
@@ -115,7 +115,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 32000,
     isAvailable: true,
     categoryId: 2,
-    imageUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       allowsTemperature: true, // Panas atau Dingin
       allowsSugarLevel: true,
@@ -131,7 +131,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 35000,
     isAvailable: true,
     categoryId: 3,
-    imageUrl: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       allowsTemperature: true, // Panas atau Dingin
       allowsSugarLevel: true,
@@ -145,7 +145,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 30000,
     isAvailable: true,
     categoryId: 3,
-    imageUrl: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       allowsTemperature: true, // Panas atau Dingin
       allowsSugarLevel: true,
@@ -161,7 +161,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 25000,
     isAvailable: true,
     categoryId: 4,
-    imageUrl: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       allowsHeating: true,
     },
@@ -173,7 +173,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 32000,
     isAvailable: true,
     categoryId: 4,
-    imageUrl: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       allowsHeating: true,
     },
@@ -187,7 +187,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 48000,
     isAvailable: true,
     categoryId: 5,
-    imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       allowsHeating: true,
       allowsSpiciness: true,
@@ -202,7 +202,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     price: 28000,
     isAvailable: true,
     categoryId: 6,
-    imageUrl: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=360&auto=format&fit=crop&q=70',
     customizationConfig: {
       allowsHeating: true,
       allowsSpiciness: true,

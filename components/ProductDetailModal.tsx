@@ -173,8 +173,11 @@ export function ProductDetailModal({
       {/* Modal / Bottom Sheet Box */}
       <div className="relative w-full max-w-lg bg-white dark:bg-zinc-950 rounded-t-3xl sm:rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden z-10 animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200">
         
+        {/* Mobile Drag Indicator Handle */}
+        <div className="w-10 h-1 rounded-full bg-white/70 absolute top-2.5 left-1/2 -translate-x-1/2 z-20 sm:hidden shadow-sm pointer-events-none" />
+
         {/* Sticky Header with close button */}
-        <div className="relative w-full h-52 sm:h-60 bg-zinc-100 dark:bg-zinc-900 shrink-0 overflow-hidden">
+        <div className="relative w-full h-44 sm:h-60 bg-zinc-100 dark:bg-zinc-900 shrink-0 overflow-hidden">
           {product.imageUrl && !imageError ? (
             <img
               src={product.imageUrl}
@@ -603,7 +606,7 @@ export function ProductDetailModal({
         </div>
 
         {/* Footer: Quantity Stepper & Add Button */}
-        <div className="p-4 sm:p-5 border-t border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md flex items-center gap-3">
+        <div className="p-4 sm:p-5 border-t border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md flex items-center gap-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
           {/* Stepper */}
           <div className="flex items-center gap-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-2xl p-1 shrink-0">
             <button
