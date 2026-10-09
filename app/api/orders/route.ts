@@ -85,20 +85,31 @@ export async function POST(request: Request) {
       orderCode,
       tableNumber,
       customerName: customerName || 'Tamu',
-      orderType: orderType || 'dine-in',
+      orderType: 'dine-in',
       generalNotes: generalNotes || '',
       totalAmount: totalAmount || 0,
       status: 'pending',
       createdAt: new Date().toISOString(),
-      items: items.map((i: any, idx: number) => ({
-        id: idx + 1,
-        productId: i.product?.id,
-        productName: i.product?.name || i.productName,
-        quantity: i.quantity,
-        price: i.product?.price || i.price,
-        subtotal: (i.product?.price || i.price) * i.quantity,
-        notes: i.notes || '',
-      })),
+      items: items.map((i: any, idx: number) => {
+        const parts: string[] = [];
+        if (i.optionsSummary && i.optionsSummary.trim()) {
+          parts.push(i.optionsSummary.trim());
+        }
+        if (i.notes && i.notes.trim()) {
+          parts.push(`Note: ${i.notes.trim()}`);
+        }
+        const fullNotes = parts.join(' | ');
+
+        return {
+          id: idx + 1,
+          productId: i.product?.id,
+          productName: i.product?.name || i.productName,
+          quantity: i.quantity,
+          price: i.product?.price || i.price,
+          subtotal: (i.product?.price || i.price) * i.quantity,
+          notes: fullNotes,
+        };
+      }),
     };
 
     // Save to local memory store

@@ -40,19 +40,23 @@ insert into public.categories (id, name) values
   (2, 'Non-Coffee'),
   (3, 'Pastry & Bakery'),
   (4, 'Main Course'),
-  (5, 'Snacks')
+  (5, 'Snacks'),
+  (6, 'Paket Makan & Minum')
 on conflict (name) do nothing;
 
 insert into public.products (name, description, price, is_available, category_id, image_url) values
   ('Monochrome Black Espresso', 'Double shot espresso blend Arabica Aceh Gayo dengan notes dark chocolate dan fruity hints.', 22000, true, 1, 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&auto=format&fit=crop&q=80'),
-  ('Noir Flat White', 'Espresso kaya rasa dipadukan dengan steamed micro-foam milk yang lembut dan balance.', 28000, true, 1, 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=600&auto=format&fit=crop&q=80'),
-  ('Manual Brew V60 Japanese', 'Single origin bean pilihan diseduh manual dengan dripper V60 disajikan dingin segar.', 32000, true, 1, 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop&q=80'),
-  ('Kyoto Ceremonial Matcha Latte', 'Pure Uji Matcha autentik dari Jepang dengan susu oat pilihan dan sentuhan pemanis aren.', 35000, true, 2, 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&auto=format&fit=crop&q=80'),
-  ('Artisan Charcoal Latte', 'Minuman khas monokrom berbasis activated charcoal organik, vanilla beans, dan fresh milk.', 30000, true, 2, 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=600&auto=format&fit=crop&q=80'),
-  ('Classic Butter Croissant', 'Flaky, buttery French pastry renyah di luar dan lembut berlapis di dalam.', 25000, true, 3, 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format&fit=crop&q=80'),
+  ('Noir Flat White', 'Espresso kaya rasa dipadukan dengan steamed micro-foam milk yang lembut dan balance. Tersedia Panas atau Dingin.', 28000, true, 1, 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=600&auto=format&fit=crop&q=80'),
+  ('Manual Brew V60 Japanese', 'Single origin bean pilihan diseduh manual dengan dripper V60 disajikan dingin segar atau panas.', 32000, true, 1, 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop&q=80'),
+  ('Kyoto Ceremonial Matcha Latte', 'Pure Uji Matcha autentik dari Jepang dengan susu oat pilihan dan sentuhan pemanis aren. Tersedia Panas atau Dingin.', 35000, true, 2, 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&auto=format&fit=crop&q=80'),
+  ('Artisan Charcoal Latte', 'Minuman khas monokrom berbasis activated charcoal organik, vanilla beans, dan fresh milk. Tersedia Panas atau Dingin.', 30000, true, 2, 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=600&auto=format&fit=crop&q=80'),
+  ('Classic Butter Croissant', 'Flaky, buttery French pastry renyah di luar dan lembut berlapis di dalam. Opsi dipanaskan hangat.', 25000, true, 3, 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format&fit=crop&q=80'),
   ('Dark Choco Almond Pain', 'Croissant isi pasta dark chocolate Belgia premium bertabur irisan kacang almond panggang.', 32000, true, 3, 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=600&auto=format&fit=crop&q=80'),
   ('Truffle Mushroom Toast', 'Sourdough toast artisan dengan sauteed wild mushrooms, keju parmesan, dan white truffle oil.', 48000, true, 4, 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop&q=80'),
-  ('Crispy Truffle Fries', 'Kentang goreng renyah dengan aroma truffle alami dan taburan sea salt rosemary.', 28000, false, 5, 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=600&auto=format&fit=crop&q=80');
+  ('Crispy Truffle Fries', 'Kentang goreng renyah dengan aroma truffle alami dan taburan sea salt rosemary.', 28000, true, 5, 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&auto=format&fit=crop&q=80'),
+  ('Paket Noir Breakfast (Croissant + Kopi)', 'Paket sarapan hemat: Classic Butter Croissant hangat dengan Kopi (Panas / Dingin).', 45000, true, 6, 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=600&auto=format&fit=crop&q=80'),
+  ('Paket Artisan Lunch (Toast + Minuman)', 'Paket makan siang: Truffle Mushroom Toast sourdough istimewa bersama minuman pilihan.', 68000, true, 6, 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&auto=format&fit=crop&q=80');
+
 
 -- 5. Buat Tabel Orders (Untuk Dashboard Kasir)
 create table if not exists public.orders (

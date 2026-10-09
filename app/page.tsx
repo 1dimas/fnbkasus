@@ -6,6 +6,7 @@ import { Navbar } from '@/components/Navbar';
 import { TableBanner } from '@/components/TableBanner';
 import { CategoryTabs } from '@/components/CategoryTabs';
 import { ProductCard } from '@/components/ProductCard';
+import { ProductDetailModal } from '@/components/ProductDetailModal';
 import { CartDrawer } from '@/components/CartDrawer';
 import { FloatingCartBar } from '@/components/FloatingCartBar';
 import { useCartStore } from '@/store/useCartStore';
@@ -23,6 +24,11 @@ function CatalogContent() {
   const [activeCategoryId, setActiveCategoryId] = useState<number>(1); // 1 = Semua Menu
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+  
+  // Product Detail Modal state
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
+
 
   // Check URL query parameters for table number (e.g. ?table=05 or ?meja=05 from QR code)
   useEffect(() => {
@@ -118,7 +124,14 @@ function CatalogContent() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
               {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onOpenDetail={(prod) => {
+                    setSelectedProduct(prod);
+                    setIsDetailOpen(true);
+                  }}
+                />
               ))}
             </div>
           )}
@@ -140,6 +153,16 @@ function CatalogContent() {
 
       {/* Slide-over Cart & Checkout Drawer */}
       <CartDrawer />
+
+      {/* Detailed Customization Modal for Food & Drinks */}
+      <ProductDetailModal
+        product={selectedProduct}
+        isOpen={isDetailOpen}
+        onClose={() => {
+          setIsDetailOpen(false);
+          setSelectedProduct(null);
+        }}
+      />
     </div>
   );
 }

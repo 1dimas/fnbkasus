@@ -32,7 +32,7 @@ export function CartDrawer() {
   const totalPrice = useCartStore((state) => state.getTotalPrice());
 
   const [tableError, setTableError] = useState(false);
-  const [editingNotesId, setEditingNotesId] = useState<number | null>(null);
+  const [editingNotesId, setEditingNotesId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [completedOrder, setCompletedOrder] = useState<OrderRecord | null>(null);
 
@@ -61,7 +61,7 @@ export function CartDrawer() {
         body: JSON.stringify({
           tableNumber: orderDetails.tableNumber,
           customerName: orderDetails.customerName || 'Tamu',
-          orderType: orderDetails.orderType,
+          orderType: 'dine-in',
           generalNotes: orderDetails.generalNotes,
           items,
           totalAmount: totalPrice,
@@ -160,7 +160,7 @@ export function CartDrawer() {
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-zinc-500">Tipe Pesanan</span>
                     <span className="font-semibold text-zinc-900 dark:text-white uppercase text-[11px]">
-                      {completedOrder.orderType === 'dine-in' ? 'Dine In (Makan di Tempat)' : 'Takeaway (Bungkus)'}
+                      Dine In (Makan di Tempat)
                     </span>
                   </div>
 
@@ -235,15 +235,22 @@ export function CartDrawer() {
 
                   {items.map((item) => (
                     <div
-                      key={item.product.id}
+                      key={item.id}
                       className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800/90 bg-zinc-50/60 dark:bg-zinc-900/50 space-y-2.5"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1">
-                          <h4 className="font-medium text-sm text-zinc-900 dark:text-zinc-100 line-clamp-1">
+                          <h4 className="font-semibold text-sm text-zinc-900 dark:text-zinc-100 line-clamp-1">
                             {item.product.name}
                           </h4>
-                          <p className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 mt-0.5">
+                          {item.optionsSummary && (
+                            <p className="text-[11px] text-zinc-600 dark:text-zinc-300 mt-0.5 font-medium flex items-center gap-1.5 flex-wrap">
+                              <span className="px-2 py-0.5 rounded bg-zinc-200/80 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-300/50 dark:border-zinc-700/50">
+                                {item.optionsSummary}
+                              </span>
+                            </p>
+                          )}
+                          <p className="text-xs font-bold text-zinc-900 dark:text-white mt-1">
                             {formatRupiah(item.product.price)}
                           </p>
                         </div>
@@ -251,8 +258,8 @@ export function CartDrawer() {
                         {/* Quantity Controls */}
                         <div className="flex items-center gap-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-0.5">
                           <button
-                            onClick={() => updateQuantity(item.product.id, -1)}
-                            className="w-6 h-6 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-700 dark:text-zinc-300"
+                            onClick={() => updateQuantity(item.id, -1)}
+                            className="w-6 h-6 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-700 dark:text-zinc-300 transition-colors"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
@@ -260,8 +267,8 @@ export function CartDrawer() {
                             {item.quantity}
                           </span>
                           <button
-                            onClick={() => updateQuantity(item.product.id, 1)}
-                            className="w-6 h-6 rounded-md bg-black text-white dark:bg-white dark:text-black flex items-center justify-center"
+                            onClick={() => updateQuantity(item.id, 1)}
+                            className="w-6 h-6 rounded-md bg-black text-white dark:bg-white dark:text-black flex items-center justify-center transition-colors"
                           >
                             <Plus className="w-3 h-3" />
                           </button>
@@ -270,13 +277,13 @@ export function CartDrawer() {
 
                       {/* Item Notes */}
                       <div className="pt-1.5 border-t border-zinc-200/50 dark:border-zinc-800/50">
-                        {editingNotesId === item.product.id ? (
+                        {editingNotesId === item.id ? (
                           <div className="flex gap-2">
                             <input
                               type="text"
                               value={item.notes || ''}
-                              placeholder="Contoh: Less ice, gula pisah..."
-                              onChange={(e) => updateItemNotes(item.product.id, e.target.value)}
+                              placeholder="Contoh: Less ice, saus dipisah..."
+                              onChange={(e) => updateItemNotes(item.id, e.target.value)}
                               className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
                               autoFocus
                             />
@@ -293,7 +300,7 @@ export function CartDrawer() {
                               {item.notes ? `Catatan: ${item.notes}` : 'Belum ada catatan khusus'}
                             </p>
                             <button
-                              onClick={() => setEditingNotesId(item.product.id)}
+                              onClick={() => setEditingNotesId(item.id)}
                               className="text-[11px] text-zinc-900 dark:text-zinc-200 hover:underline font-medium flex items-center gap-1"
                             >
                               <FileText className="w-3 h-3" />
@@ -312,30 +319,17 @@ export function CartDrawer() {
                     Informasi Meja & Pelanggan
                   </span>
 
-                  {/* Order Type Toggle */}
-                  <div className="grid grid-cols-2 gap-2 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl">
-                    <button
-                      type="button"
-                      onClick={() => setOrderDetails({ orderType: 'dine-in' })}
-                      className={`py-2 text-xs font-semibold rounded-lg transition-all ${
-                        orderDetails.orderType === 'dine-in'
-                          ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm'
-                          : 'text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white'
-                      }`}
-                    >
-                      Dine In (Di Meja)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setOrderDetails({ orderType: 'takeaway' })}
-                      className={`py-2 text-xs font-semibold rounded-lg transition-all ${
-                        orderDetails.orderType === 'takeaway'
-                          ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm'
-                          : 'text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white'
-                      }`}
-                    >
-                      Takeaway (Bungkus)
-                    </button>
+                  {/* Order Method: Dine In Only */}
+                  <div className="flex items-center justify-between px-3.5 py-2.5 bg-zinc-100 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                    <div className="flex items-center gap-2">
+                      <UtensilsCrossed className="w-4 h-4 text-zinc-900 dark:text-zinc-100" />
+                      <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                        Metode Pesanan
+                      </span>
+                    </div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider bg-black text-white dark:bg-white dark:text-black px-2.5 py-1 rounded-lg shadow-sm">
+                      Dine In (Makan di Tempat)
+                    </span>
                   </div>
 
                   {/* Table Number */}

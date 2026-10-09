@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
-import { INITIAL_PRODUCTS } from '@/lib/mock-data';
+import {
+  getLocalProducts,
+  addLocalProduct,
+  updateLocalProduct,
+  deleteLocalProduct,
+  toggleLocalProductAvailability,
+} from '@/lib/products-store';
 
 export async function GET() {
   try {
@@ -38,13 +44,161 @@ export async function GET() {
       }
     }
   } catch (err) {
-    console.error('Error fetching products from Supabase, using mock fallback:', err);
+    console.error('Error fetching products from Supabase, using prototype fallback:', err);
   }
 
-  // Fallback to initial mock data
+  // Fallback to local in-memory prototype store
   return NextResponse.json({
     success: true,
     source: 'local',
-    products: INITIAL_PRODUCTS,
+    products: getLocalProducts(),
   });
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { name, description, price, categoryId, imageUrl, isAvailable, customizationConfig } = body;
+
+    if (!name || price === undefined) {
+      return NextResponse.json(
+        { success: false, message: 'Nama menu dan harga harus diisi.' },
+        { status: 400 }
+      );
+    }
+
+    // Save to local prototype store
+    const newProduct = addLocalProduct({
+      name,
+      description,
+      price: Number(price),
+      categoryId: Number(categoryId) || 2,
+      imageUrl,
+      isAvailable: isAvailable !== undefined ? isAvailable : true,
+      customizationConfig,
+    });
+
+    // If Supabase is configured, also persist to Supabase
+    if (isSupabaseConfigured && supabase) {
+      try {
+        await supabase.from('products').insert({
+          name: newProduct.name,
+          description: newProduct.description,
+          price: newProduct.price,
+          category_id: newProduct.categoryId,
+          image_url: newProduct.imageUrl,
+          is_available: newProduct.isAvailable,
+        });
+      } catch (sbErr) {
+        console.error('Failed to sync new product to Supabase:', sbErr);
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Menu berhasil ditambahkan.',
+      product: newProduct,
+    });
+  } catch (error) {
+    console.error('Failed to create product:', error);
+    return NextResponse.json(
+      { success: false, message: 'Gagal menambahkan menu.' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const body = await request.json();
+    const { id, action, ...updates } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, message: 'ID menu harus disertakan.' },
+        { status: 400 }
+      );
+    }
+
+    let updatedProduct;
+    if (action === 'toggle-availability') {
+      updatedProduct = toggleLocalProductAvailability(Number(id));
+    } else {
+      updatedProduct = updateLocalProduct(Number(id), updates);
+    }
+
+    if (!updatedProduct) {
+      return NextResponse.json(
+        { success: false, message: 'Menu tidak ditemukan.' },
+        { status: 404 }
+      );
+    }
+
+    // If Supabase is configured, also update in Supabase
+    if (isSupabaseConfigured && supabase) {
+      try {
+        await supabase
+          .from('products')
+          .update({
+            ...(updates.name && { name: updates.name }),
+            ...(updates.price !== undefined && { price: updates.price }),
+            ...(updates.description !== undefined && { description: updates.description }),
+            ...(updates.categoryId !== undefined && { category_id: updates.categoryId }),
+            ...(updates.imageUrl !== undefined && { image_url: updates.imageUrl }),
+            is_available: updatedProduct.isAvailable,
+          })
+          .eq('id', id);
+      } catch (sbErr) {
+        console.error('Failed to update product in Supabase:', sbErr);
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Menu berhasil diperbarui.',
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.error('Failed to update product:', error);
+    return NextResponse.json(
+      { success: false, message: 'Gagal memperbarui menu.' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const idParam = searchParams.get('id');
+
+    if (!idParam) {
+      return NextResponse.json(
+        { success: false, message: 'ID menu harus disertakan.' },
+        { status: 400 }
+      );
+    }
+
+    const id = Number(idParam);
+    const deleted = deleteLocalProduct(id);
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        await supabase.from('products').delete().eq('id', id);
+      } catch (sbErr) {
+        console.error('Failed to delete product from Supabase:', sbErr);
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: deleted ? 'Menu berhasil dihapus.' : 'Menu tidak ditemukan.',
+    });
+  } catch (error) {
+    console.error('Failed to delete product:', error);
+    return NextResponse.json(
+      { success: false, message: 'Gagal menghapus menu.' },
+      { status: 500 }
+    );
+  }
 }

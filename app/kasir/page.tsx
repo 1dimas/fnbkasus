@@ -16,10 +16,13 @@ import {
   TrendingUp,
   AlertCircle,
   ArrowLeft,
-  FileText
+  FileText,
+  ShoppingBag,
+  UtensilsCrossed
 } from 'lucide-react';
 import { OrderRecord, OrderStatus } from '@/types';
 import { formatRupiah } from '@/lib/utils';
+import { KasirMenuManager } from '@/components/KasirMenuManager';
 
 export default function KasirOrdersPage() {
   const router = useRouter();
@@ -29,6 +32,7 @@ export default function KasirOrdersPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [currentTime, setCurrentTime] = useState('');
+  const [activeTab, setActiveTab] = useState<'orders' | 'menu'>('orders');
 
   // Update clock
   useEffect(() => {
@@ -200,14 +204,50 @@ export default function KasirOrdersPage() {
 
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-        {/* KPI Summary Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-850 space-y-1">
-            <span className="text-[11px] uppercase tracking-wider font-medium text-zinc-500 block">
-              Total Pesanan
-            </span>
-            <p className="text-2xl font-black tracking-tight">{totalOrdersCount}</p>
-          </div>
+        {/* Navigation Tabs: Antrean Pesanan vs Kelola Menu */}
+        <div className="flex items-center gap-3 border-b border-zinc-800 pb-4">
+          <button
+            onClick={() => setActiveTab('orders')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === 'orders'
+                ? 'bg-white text-black shadow-md'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700'
+            }`}
+          >
+            <ShoppingBag className="w-4 h-4" />
+            <span>Monitor Antrean Pesanan</span>
+            {pendingCount > 0 && (
+              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-400 text-black font-extrabold">
+                {pendingCount}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('menu')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === 'menu'
+                ? 'bg-white text-black shadow-md'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700'
+            }`}
+          >
+            <UtensilsCrossed className="w-4 h-4" />
+            <span>Kelola Menu (Katalog)</span>
+          </button>
+        </div>
+
+        {activeTab === 'menu' ? (
+          <KasirMenuManager />
+        ) : (
+          <>
+            {/* KPI Summary Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-850 space-y-1">
+                <span className="text-[11px] uppercase tracking-wider font-medium text-zinc-500 block">
+                  Total Pesanan
+                </span>
+                <p className="text-2xl font-black tracking-tight">{totalOrdersCount}</p>
+              </div>
 
           <div className="p-4 rounded-2xl bg-zinc-950 border border-amber-900/30 space-y-1">
             <div className="flex items-center justify-between">
@@ -326,8 +366,8 @@ export default function KasirOrdersPage() {
                           <p className="text-xs text-zinc-400 flex items-center gap-1 mt-0.5">
                             <User className="w-3 h-3 text-zinc-500" />
                             {order.customerName || 'Tamu'}
-                            <span className="text-[10px] uppercase font-bold text-zinc-400 bg-zinc-900 px-1.5 py-0.5 rounded ml-1">
-                              {order.orderType === 'dine-in' ? 'Dine In' : 'Takeaway'}
+                            <span className="text-[10px] uppercase font-bold text-zinc-300 bg-zinc-900 px-2 py-0.5 rounded ml-1 border border-zinc-800">
+                              Dine In
                             </span>
                           </p>
                         </div>
@@ -459,7 +499,10 @@ export default function KasirOrdersPage() {
             })}
           </div>
         )}
-      </main>
-    </div>
-  );
+      </>
+    )}
+  </main>
+</div>
+);
 }
+
