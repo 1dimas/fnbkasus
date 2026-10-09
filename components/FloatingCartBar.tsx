@@ -19,7 +19,7 @@ export function FloatingCartBar({ onOpenCart }: FloatingCartBarProps) {
   }
 
   return (
-    <aside aria-label="Bilah ringkasan keranjang" className="fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-0 right-0 z-30 px-3 sm:px-4 max-w-lg mx-auto pointer-events-auto animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <aside aria-label="Bilah ringkasan keranjang" className="fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-0 right-0 z-30 px-3 sm:px-4 max-w-lg mx-auto pointer-events-auto animate-float-bar">
       <button
         onClick={onOpenCart}
         className="w-full bg-black/95 dark:bg-white/95 backdrop-blur-md text-white dark:text-black p-3 sm:p-3.5 rounded-2xl shadow-2xl flex items-center justify-between border border-zinc-700/50 dark:border-zinc-300 hover:scale-[1.01] active:scale-[0.98] transition-all"

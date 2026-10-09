@@ -90,6 +90,17 @@ export function ProductDetailModal({
     }
   }, [product, isOpen]);
 
+  // Lock body scroll while modal is open to eliminate background bounce & glitch
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
+
   if (!isOpen || !product) return null;
 
   const isCoffee = product.categoryId === 2;
@@ -163,15 +174,15 @@ export function ProductDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto flex items-end sm:items-center justify-center p-0 sm:p-4">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-50 overflow-hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+      {/* Backdrop with smooth fade */}
       <div 
         onClick={onClose}
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-black/70 backdrop-blur-sm animate-backdrop cursor-pointer"
       />
 
-      {/* Modal / Bottom Sheet Box */}
-      <div className="relative w-full max-w-lg bg-white dark:bg-zinc-950 rounded-t-3xl sm:rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col max-h-[92vh] sm:max-h-[88vh] overflow-hidden z-10 animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200">
+      {/* Modal / Bottom Sheet Box with fluid spring motion */}
+      <div className="relative w-full max-w-lg bg-white dark:bg-zinc-950 rounded-t-3xl sm:rounded-3xl shadow-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col max-h-[90vh] sm:max-h-[88vh] overflow-hidden z-10 animate-sheet-up sm:animate-pop-in">
         
         {/* Mobile Drag Indicator Handle */}
         <div className="w-10 h-1 rounded-full bg-white/70 absolute top-2.5 left-1/2 -translate-x-1/2 z-20 sm:hidden shadow-sm pointer-events-none" />
@@ -233,7 +244,7 @@ export function ProductDetailModal({
         </div>
 
         {/* Scrollable Customization Content */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5">
+        <div className="flex-1 overflow-y-auto overscroll-contain touch-scroll p-4 sm:p-5 space-y-5">
           {/* Product Description */}
           {product.description && (
             <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed bg-zinc-50 dark:bg-zinc-900/60 p-3.5 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80">

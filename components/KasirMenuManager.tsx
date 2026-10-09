@@ -336,13 +336,13 @@ export function KasirMenuManager() {
 
       {/* Modal Tambah / Edit Menu */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center p-4">
           <div
             onClick={() => !submitting && setIsModalOpen(false)}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm animate-backdrop cursor-pointer"
           />
 
-          <div className="relative w-full max-w-lg bg-zinc-950 rounded-3xl border border-zinc-800 shadow-2xl overflow-hidden z-10 animate-in zoom-in-95 duration-200">
+          <div className="relative w-full max-w-lg bg-zinc-950 rounded-3xl border border-zinc-800 shadow-2xl overflow-hidden z-10 animate-pop-in">
             {/* Modal Header */}
             <div className="p-5 border-b border-zinc-800 flex items-center justify-between">
               <div>
@@ -363,7 +363,7 @@ export function KasirMenuManager() {
             </div>
 
             {/* Modal Form */}
-            <form onSubmit={handleSaveProduct} className="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+            <form onSubmit={handleSaveProduct} className="p-5 space-y-4 max-h-[75vh] overflow-y-auto overscroll-contain touch-scroll">
               {/* Nama Menu */}
               <div>
                 <label className="block text-xs font-semibold text-zinc-300 mb-1">

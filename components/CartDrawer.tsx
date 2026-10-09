@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, 
   Trash2, 
@@ -35,6 +35,17 @@ export function CartDrawer() {
   const [editingNotesId, setEditingNotesId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [completedOrder, setCompletedOrder] = useState<OrderRecord | null>(null);
+
+  // Lock body scroll while cart is open
+  useEffect(() => {
+    if (isCartOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isCartOpen]);
 
   if (!isCartOpen) return null;
 
@@ -86,15 +97,15 @@ export function CartDrawer() {
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
-      {/* Backdrop */}
+      {/* Backdrop with smooth fade */}
       <div 
         onClick={handleClose}
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-300" 
+        className="absolute inset-0 bg-black/65 backdrop-blur-sm animate-backdrop cursor-pointer" 
       />
 
-      {/* Drawer Panel */}
+      {/* Drawer Panel with fluid slide motion */}
       <div className="absolute inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
-        <div className="w-screen max-w-full sm:max-w-md bg-white dark:bg-zinc-950 shadow-2xl flex flex-col border-l border-zinc-200 dark:border-zinc-800 animate-in slide-in-from-right duration-300">
+        <div className="w-screen max-w-full sm:max-w-md bg-white dark:bg-zinc-950 shadow-2xl flex flex-col border-l border-zinc-200 dark:border-zinc-800 animate-drawer-right">
           
           {/* Header */}
           <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
@@ -119,11 +130,11 @@ export function CartDrawer() {
             </button>
           </div>
 
-          {/* Body Content */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-6">
+          {/* Body Content with contained momentum scroll */}
+          <div className="flex-1 overflow-y-auto overscroll-contain touch-scroll p-4 space-y-6">
             {completedOrder ? (
               /* Order Success View */
-              <div className="py-6 px-2 space-y-6 text-center animate-in zoom-in-95 duration-300">
+              <div className="py-6 px-2 space-y-6 text-center animate-pop-in">
                 <div className="w-20 h-20 mx-auto rounded-full bg-black text-white dark:bg-white dark:text-black flex items-center justify-center shadow-xl">
                   <CheckCircle2 className="w-10 h-10 stroke-[2.5]" />
                 </div>
