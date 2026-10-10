@@ -345,45 +345,56 @@ export function CartDrawer() {
 
                   {/* Table Number */}
                   <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label 
-                        htmlFor="table-number-input" 
-                        className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300"
-                      >
-                        Nomor Meja <span className="text-red-500">*</span>
-                      </label>
-                      {orderDetails.tableNumber && (
+                    <label 
+                      className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1"
+                    >
+                      Nomor Meja <span className="text-red-500">*</span>
+                    </label>
+
+                    {orderDetails.tableNumber ? (
+                      <div className="px-3.5 py-3 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-lg bg-black text-white dark:bg-white dark:text-black flex items-center justify-center font-bold text-xs font-mono">
+                            {orderDetails.tableNumber}
+                          </div>
+                          <div>
+                            <span className="text-xs font-black text-zinc-900 dark:text-white block">
+                              Meja {orderDetails.tableNumber}
+                            </span>
+                            <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
+                              Terkunci dari scan QR meja (tidak dapat diubah)
+                            </span>
+                          </div>
+                        </div>
                         <span className="inline-flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800/80">
                           <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                          Terisi Otomatis dari QR
+                          Terkunci
                         </span>
-                      )}
-                    </div>
-                    <input
-                      id="table-number-input"
-                      type="text"
-                      placeholder="Contoh: 04 / Bar / Outdoor 2"
-                      value={orderDetails.tableNumber}
-                      onChange={(e) => {
-                        setOrderDetails({ tableNumber: e.target.value });
-                        if (e.target.value.trim()) setTableError(false);
-                      }}
-                      className={`w-full px-3.5 py-2.5 rounded-xl text-sm border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white ${
-                        tableError
-                          ? 'border-red-500 ring-1 ring-red-500'
-                          : 'border-zinc-300 dark:border-zinc-700 font-semibold'
-                      }`}
-                    />
-                    {tableError && (
-                      <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1 font-medium">
-                        <AlertCircle className="w-3.5 h-3.5" />
-                        Wajib mengisi nomor meja agar kasir mengetahui lokasi Anda!
-                      </p>
-                    )}
-                    {orderDetails.tableNumber && !tableError && (
-                      <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
-                        Pesanan ini akan diantarkan langsung ke <strong>Meja {orderDetails.tableNumber}</strong>.
-                      </p>
+                      </div>
+                    ) : (
+                      <>
+                        <input
+                          id="table-number-input"
+                          type="text"
+                          placeholder="Scan QR di meja atau ketik nomor meja"
+                          value={orderDetails.tableNumber}
+                          onChange={(e) => {
+                            setOrderDetails({ tableNumber: e.target.value });
+                            if (e.target.value.trim()) setTableError(false);
+                          }}
+                          className={`w-full px-3.5 py-2.5 rounded-xl text-sm border bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white ${
+                            tableError
+                              ? 'border-red-500 ring-1 ring-red-500'
+                              : 'border-zinc-300 dark:border-zinc-700 font-semibold'
+                          }`}
+                        />
+                        {tableError && (
+                          <p className="text-[11px] text-red-500 mt-1 flex items-center gap-1 font-medium">
+                            <AlertCircle className="w-3.5 h-3.5" />
+                            Wajib mengisi nomor meja atau scan QR di meja Anda!
+                          </p>
+                        )}
+                      </>
                     )}
                   </div>
 

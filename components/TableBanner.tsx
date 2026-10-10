@@ -11,20 +11,6 @@ interface TableBannerProps {
 
 export function TableBanner({ searchQuery, onSearchChange }: TableBannerProps) {
   const orderDetails = useCartStore((state) => state.orderDetails);
-  const setOrderDetails = useCartStore((state) => state.setOrderDetails);
-  const [isEditingTable, setIsEditingTable] = useState(false);
-  const [tempTable, setTempTable] = useState(orderDetails.tableNumber);
-
-  const handleSaveTable = (e: React.FormEvent) => {
-    e.preventDefault();
-    setOrderDetails({ tableNumber: tempTable });
-    try {
-      localStorage.setItem('cafe_scanned_table', tempTable);
-    } catch (e) {
-      // ignore
-    }
-    setIsEditingTable(false);
-  };
 
   return (
     <section className="max-w-4xl mx-auto px-3.5 sm:px-4 pt-3 sm:pt-6 pb-1 sm:pb-2 space-y-3 sm:space-y-4">
@@ -46,55 +32,27 @@ export function TableBanner({ searchQuery, onSearchChange }: TableBannerProps) {
             </p>
           </div>
 
-          {/* Quick Table Indicator / Editor */}
+          {/* Quick Table Indicator (Locked Display Only) */}
           <div className="flex flex-col sm:items-end gap-2">
-            {isEditingTable ? (
-              <form onSubmit={handleSaveTable} className="flex items-center gap-1.5 bg-zinc-900 p-1.5 rounded-xl border border-zinc-700">
-                <input
-                  type="text"
-                  placeholder="No. Meja"
-                  value={tempTable}
-                  onChange={(e) => setTempTable(e.target.value)}
-                  className="w-24 px-2 py-1 text-xs bg-black text-white rounded-lg border border-zinc-700 focus:outline-none focus:ring-1 focus:ring-white"
-                  autoFocus
-                />
-                <button
-                  type="submit"
-                  className="text-xs px-3 py-1 bg-white text-black font-bold rounded-lg hover:bg-zinc-200 transition-colors"
-                >
-                  Simpan
-                </button>
-              </form>
-            ) : (
-              <div className="flex items-center gap-2 bg-zinc-900/90 border border-zinc-800 px-3.5 py-2 rounded-2xl backdrop-blur-sm">
-                <MapPin className="w-4 h-4 text-zinc-300 shrink-0" />
-                <div className="text-left">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-zinc-400 uppercase tracking-widest block font-medium">
-                      Posisi Duduk
-                    </span>
-                    {orderDetails.tableNumber && (
-                      <span className="inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/80 font-bold">
-                        <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span>
-                        Terkoneksi
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-xs font-black text-white tracking-wide">
-                    {orderDetails.tableNumber ? `Meja ${orderDetails.tableNumber}` : 'Belum diisi'}
+            <div className="flex items-center gap-2 bg-zinc-900/90 border border-zinc-800 px-3.5 py-2 rounded-2xl backdrop-blur-sm">
+              <MapPin className="w-4 h-4 text-zinc-300 shrink-0" />
+              <div className="text-left">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] text-zinc-400 uppercase tracking-widest block font-medium">
+                    Posisi Duduk
                   </span>
+                  {orderDetails.tableNumber && (
+                    <span className="inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/80 font-bold">
+                      <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span>
+                      Terkoneksi
+                    </span>
+                  )}
                 </div>
-                <button
-                  onClick={() => {
-                    setTempTable(orderDetails.tableNumber);
-                    setIsEditingTable(true);
-                  }}
-                  className="ml-2 text-[11px] font-semibold text-zinc-300 hover:text-white underline cursor-pointer"
-                >
-                  {orderDetails.tableNumber ? 'Ubah' : 'Set Meja'}
-                </button>
+                <span className="text-xs font-black text-white tracking-wide">
+                  {orderDetails.tableNumber ? `Meja ${orderDetails.tableNumber}` : 'Scan QR di Meja'}
+                </span>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
