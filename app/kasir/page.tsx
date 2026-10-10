@@ -18,11 +18,13 @@ import {
   ArrowLeft,
   FileText,
   ShoppingBag,
-  UtensilsCrossed
+  UtensilsCrossed,
+  QrCode
 } from 'lucide-react';
 import { OrderRecord, OrderStatus } from '@/types';
 import { formatRupiah } from '@/lib/utils';
 import { KasirMenuManager } from '@/components/KasirMenuManager';
+import { TableQrGenerator } from '@/components/TableQrGenerator';
 
 export default function KasirOrdersPage() {
   const router = useRouter();
@@ -32,7 +34,18 @@ export default function KasirOrdersPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [currentTime, setCurrentTime] = useState('');
-  const [activeTab, setActiveTab] = useState<'orders' | 'menu'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'menu' | 'qr'>('orders');
+
+  // Check tab query parameter (e.g. ?tab=qr)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab');
+      if (tab === 'qr' || tab === 'menu' || tab === 'orders') {
+        setActiveTab(tab);
+      }
+    }
+  }, []);
 
   // Update clock
   useEffect(() => {
@@ -234,10 +247,24 @@ export default function KasirOrdersPage() {
             <UtensilsCrossed className="w-4 h-4" />
             <span>Kelola Menu (Katalog)</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('qr')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+              activeTab === 'qr'
+                ? 'bg-white text-black shadow-md'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700'
+            }`}
+          >
+            <QrCode className="w-4 h-4" />
+            <span>Generator QR Meja Permanen</span>
+          </button>
         </div>
 
         {activeTab === 'menu' ? (
           <KasirMenuManager />
+        ) : activeTab === 'qr' ? (
+          <TableQrGenerator />
         ) : (
           <>
             {/* KPI Summary Cards */}

@@ -28,13 +28,29 @@ function CatalogContent() {
   // Product Detail Modal state
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState<boolean>(false);
-
+  const [scannedTableToast, setScannedTableToast] = useState<string | null>(null);
 
   // Check URL query parameters for table number (e.g. ?table=05 or ?meja=05 from QR code)
   useEffect(() => {
     const tableFromUrl = searchParams.get('table') || searchParams.get('meja');
     if (tableFromUrl) {
       setOrderDetails({ tableNumber: tableFromUrl });
+      setScannedTableToast(tableFromUrl);
+      try {
+        localStorage.setItem('cafe_scanned_table', tableFromUrl);
+      } catch (e) {
+        // ignore
+      }
+    } else {
+      // Check if table was previously saved in this browser session
+      try {
+        const saved = localStorage.getItem('cafe_scanned_table');
+        if (saved) {
+          setOrderDetails({ tableNumber: saved });
+        }
+      } catch (e) {
+        // ignore
+      }
     }
   }, [searchParams, setOrderDetails]);
 
@@ -80,6 +96,26 @@ function CatalogContent() {
     <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100">
       {/* Top Navigation */}
       <Navbar onOpenCart={() => setIsCartOpen(true)} />
+
+      {/* Scanned QR Table Welcome Banner */}
+      {scannedTableToast && (
+        <div className="bg-emerald-950/90 text-emerald-200 border-b border-emerald-800/80 px-4 py-2.5 text-xs backdrop-blur-md">
+          <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <span>
+                <strong>QR Meja Berhasil Terhubung:</strong> Anda sedang memesan dari <strong>Meja {scannedTableToast}</strong>. Nomor meja otomatis terisi saat pesan.
+              </span>
+            </div>
+            <button
+              onClick={() => setScannedTableToast(null)}
+              className="text-[11px] text-emerald-400 hover:text-white underline shrink-0 cursor-pointer"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="flex-1 pb-28 sm:pb-24">

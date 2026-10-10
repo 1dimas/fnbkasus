@@ -18,6 +18,11 @@ export function TableBanner({ searchQuery, onSearchChange }: TableBannerProps) {
   const handleSaveTable = (e: React.FormEvent) => {
     e.preventDefault();
     setOrderDetails({ tableNumber: tempTable });
+    try {
+      localStorage.setItem('cafe_scanned_table', tempTable);
+    } catch (e) {
+      // ignore
+    }
     setIsEditingTable(false);
   };
 
@@ -62,12 +67,20 @@ export function TableBanner({ searchQuery, onSearchChange }: TableBannerProps) {
               </form>
             ) : (
               <div className="flex items-center gap-2 bg-zinc-900/90 border border-zinc-800 px-3.5 py-2 rounded-2xl backdrop-blur-sm">
-                <MapPin className="w-4 h-4 text-zinc-300" />
+                <MapPin className="w-4 h-4 text-zinc-300 shrink-0" />
                 <div className="text-left">
-                  <span className="text-[10px] text-zinc-400 uppercase tracking-widest block font-medium">
-                    Posisi Duduk
-                  </span>
-                  <span className="text-xs font-bold text-white tracking-wide">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] text-zinc-400 uppercase tracking-widest block font-medium">
+                      Posisi Duduk
+                    </span>
+                    {orderDetails.tableNumber && (
+                      <span className="inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/80 font-bold">
+                        <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse"></span>
+                        Terkoneksi
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs font-black text-white tracking-wide">
                     {orderDetails.tableNumber ? `Meja ${orderDetails.tableNumber}` : 'Belum diisi'}
                   </span>
                 </div>
@@ -76,7 +89,7 @@ export function TableBanner({ searchQuery, onSearchChange }: TableBannerProps) {
                     setTempTable(orderDetails.tableNumber);
                     setIsEditingTable(true);
                   }}
-                  className="ml-2 text-[11px] font-semibold text-zinc-300 hover:text-white underline"
+                  className="ml-2 text-[11px] font-semibold text-zinc-300 hover:text-white underline cursor-pointer"
                 >
                   {orderDetails.tableNumber ? 'Ubah' : 'Set Meja'}
                 </button>
